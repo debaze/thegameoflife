@@ -24,33 +24,19 @@ public class Grid {
 
 		for (int i = 0, j; i < cols; i++) {
 			for (j = 0; j < rows; j++) {
-				cells[i][j] = Math.random() < .5 ? 1 : 0;
+				cells[i][j] = Math.random() < .25 ? 1 : 0;
 			}
 		}
 	}
 
 	public void evolve() {
-		int i, j;
-
-		if (userCells.isEmpty()) {
-			for (i = 0; i < cols; i++) {
-				for (j = 0; j < rows; j++) {
-					viewCells[i][j] = getState(cells[i][j], getNeighborCount(i, j));
-				}
+		for (int i = 0, j; i < cols; i++) {
+			for (j = 0; j < rows; j++) {
+				viewCells[i][j] = getState(cells[i][j], getNeighborCount(i, j));
 			}
-		} else {
-			for (i = 0; i < cols; i++) {
-				for (j = 0; j < rows; j++) {
-					if (getUserCell(i, j)) cells[i][j] = 1;
-	
-					viewCells[i][j] = getState(cells[i][j], getNeighborCount(i, j));
-				}
-			}
-
-			userCells.clear();
 		}
 
-		for (i = 0; i < cols; i++) {
+		for (int i = 0, j; i < cols; i++) {
 			for (j = 0; j < rows; j++) {
 				cells[i][j] = viewCells[i][j];
 			}
@@ -121,6 +107,18 @@ public class Grid {
 
 	public void addUserCell(final int x, final int y) {
 		userCells.add(new int[] {x, y});
+	}
+
+	public void mergeUserCells() {
+		if (userCells.isEmpty()) return;
+
+		for (int i = 0, j; i < cols; i++) {
+			for (j = 0; j < rows; j++) {
+				if (getUserCell(i, j)) cells[i][j] = 1;
+			}
+		}
+
+		userCells.clear();
 	}
 
 	public void clear() {

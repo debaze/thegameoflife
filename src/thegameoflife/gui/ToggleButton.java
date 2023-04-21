@@ -7,15 +7,15 @@ import javax.swing.JButton;
 
 public class ToggleButton extends JButton {
 	public ToggleButton(final Window window) {
-		super(window.isRunning ? "Pause" : "Play");
+		super(window.isSimulationRunning ? "Pause" : "Play");
 
 		setPreferredSize(new Dimension(80, 20));
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(final MouseEvent event) {
-				window.isRunning = !window.isRunning;
+				window.isSimulationRunning = !window.isSimulationRunning;
 
-				setText(window.isRunning ? "Pause" : "Play");
+				setText(window.isSimulationRunning ? "Pause" : "Play");
 			}
 		});
 	}

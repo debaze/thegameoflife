@@ -9,12 +9,12 @@ import thegameoflife.Grid;
 
 public class Window extends JFrame {
 	private final long frameTime;
-	public boolean isRunning;
+	public boolean isSimulationRunning;
 
-	public Window(final Grid grid, final Properties properties) {
+	public Window(final Properties properties) {
 		super("The Game of Life");
 
-		isRunning = true;
+		isSimulationRunning = true;
 
 		setResizable(false);
 		setVisible(true);
@@ -25,8 +25,13 @@ public class Window extends JFrame {
 			}
 		});
 
+		final Grid grid = new Grid(
+			Integer.parseInt(properties.getProperty("COLS")),
+			Integer.parseInt(properties.getProperty("ROWS")),
+			Float.parseFloat(properties.getProperty("DECAY"))
+		);
 		final Canvas canvas = new Canvas(grid, Integer.parseInt(properties.getProperty("SCALE")), this);
-		final Controls controls = new Controls(grid, canvas, this);
+		final Controls controls = new Controls(grid, this);
 
 		add(canvas, BorderLayout.WEST);
 		add(controls, BorderLayout.EAST);
@@ -36,10 +41,11 @@ public class Window extends JFrame {
 		frameTime = 1000 / Integer.parseInt(properties.getProperty("FRAMES_PER_SECOND"));
 
 		for (;;) {
-			if (isRunning) {
-				grid.evolve();
-				canvas.repaint();
-			}
+			grid.mergeUserCells();
+
+			if (isSimulationRunning) grid.evolve();
+
+			canvas.repaint();
 
 			try {
 				Thread.sleep(frameTime);

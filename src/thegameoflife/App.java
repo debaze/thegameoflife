@@ -6,7 +6,7 @@ import javax.swing.UIManager;
 import thegameoflife.gui.Window;
 
 public class App {
-	public static String propertiesPath = "src/config.properties";
+	public static final String propertiesPath = "src/config.properties";
 
 	public static void main(final String[] args) throws Exception {
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -15,12 +15,6 @@ public class App {
 
 		properties.load(new FileInputStream(propertiesPath));
 
-		final Grid grid = new Grid(
-			Integer.parseInt(properties.getProperty("COLS")),
-			Integer.parseInt(properties.getProperty("ROWS")),
-			Float.parseFloat(properties.getProperty("DECAY"))
-		);
-
-		new Window(grid, properties);
+		new Window(properties);
 	}
 }

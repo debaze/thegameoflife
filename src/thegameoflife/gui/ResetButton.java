@@ -7,7 +7,7 @@ import javax.swing.JButton;
 import thegameoflife.Grid;
 
 public class ResetButton extends JButton {
-	public ResetButton(final Grid grid, final Canvas canvas) {
+	public ResetButton(final Grid grid) {
 		super("Reset");
 
 		setPreferredSize(new Dimension(80, 20));
@@ -15,7 +15,6 @@ public class ResetButton extends JButton {
 			@Override
 			public void mouseClicked(final MouseEvent event) {
 				grid.clear();
-				canvas.repaint();
 			}
 		});
 	}
