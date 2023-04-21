@@ -13,17 +13,17 @@ import javax.swing.JPanel;
 import thegameoflife.Grid;
 
 public class Canvas extends JPanel {
-	private static final int[] cursorLocation = new int[2];
-	private static final Color cursorColor = new Color(.5f, .5f, .5f);
-
 	private final Grid grid;
 	private final int scale;
-	private boolean isHovered;
+	private final Color cursorColor = new Color(.5f, .5f, .5f);
+	private final int[] cursorLocation = new int[2];
+	private boolean isHovered = false;
 
-	public Canvas(final Grid grid, final int scale, final Window window) {
+	public Canvas(final Grid grid, final int scale) {
+		assert scale != 0 : "The scale must not be null.";
+
 		this.grid = grid;
 		this.scale = scale;
-		isHovered = false;
 
 		setPreferredSize(new Dimension(grid.cols * scale, grid.rows * scale));
 		setBackground(Color.WHITE);
@@ -37,7 +37,7 @@ public class Canvas extends JPanel {
 				isHovered = false;
 			}
 
-			public void mouseClicked(final MouseEvent event) {
+			public void mousePressed(final MouseEvent event) {
 				grid.addUserCell(cursorLocation[0], cursorLocation[1]);
 			}
 		});

@@ -5,9 +5,8 @@ import java.util.ArrayList;
 public class Grid {
 	public final int cols, rows;
 	public final float decay;
-	public final float[][] viewCells;
-	public final float[][] cells;
-	private final ArrayList<int[]> userCells;
+	public final float[][] cells, clonedCells;
+	private final ArrayList<int[]> userCells = new ArrayList<int[]>();
 	private final int[][] neighbors = new int[8][2];
 
 	public Grid(final int cols, final int rows, final float decay) {
@@ -18,9 +17,8 @@ public class Grid {
 		this.cols = cols;
 		this.rows = rows;
 		this.decay = decay;
-		viewCells = new float[cols][rows];
 		cells = new float[cols][rows];
-		userCells = new ArrayList<int[]>();
+		clonedCells = new float[cols][rows];
 
 		for (int i = 0, j; i < cols; i++) {
 			for (j = 0; j < rows; j++) {
@@ -30,17 +28,31 @@ public class Grid {
 	}
 
 	public void evolve() {
-		for (int i = 0, j; i < cols; i++) {
+		int i, j;
+
+		for (i = 0; i < cols; i++) {
 			for (j = 0; j < rows; j++) {
-				viewCells[i][j] = getState(cells[i][j], getNeighborCount(i, j));
+				clonedCells[i][j] = getState(cells[i][j], getNeighborCount(i, j));
 			}
 		}
 
-		for (int i = 0, j; i < cols; i++) {
+		for (i = 0; i < cols; i++) {
 			for (j = 0; j < rows; j++) {
-				cells[i][j] = viewCells[i][j];
+				cells[i][j] = clonedCells[i][j];
 			}
 		}
+	}
+
+	public void registerUserCells() {
+		if (userCells.isEmpty()) return;
+
+		for (int i = 0, j; i < cols; i++) {
+			for (j = 0; j < rows; j++) {
+				if (getUserCell(i, j)) cells[i][j] = 1;
+			}
+		}
+
+		userCells.clear();
 	}
 
 	public void registerNeighbors(final int x, final int y) {
@@ -107,18 +119,6 @@ public class Grid {
 
 	public void addUserCell(final int x, final int y) {
 		userCells.add(new int[] {x, y});
-	}
-
-	public void mergeUserCells() {
-		if (userCells.isEmpty()) return;
-
-		for (int i = 0, j; i < cols; i++) {
-			for (j = 0; j < rows; j++) {
-				if (getUserCell(i, j)) cells[i][j] = 1;
-			}
-		}
-
-		userCells.clear();
 	}
 
 	public void clear() {

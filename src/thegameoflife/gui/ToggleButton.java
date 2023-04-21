@@ -5,6 +5,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 
+// TODO: rework OO
 public class ToggleButton extends JButton {
 	public ToggleButton(final Window window) {
 		super(window.isSimulationRunning ? "Pause" : "Play");

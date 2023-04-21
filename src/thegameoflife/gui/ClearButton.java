@@ -6,9 +6,10 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import thegameoflife.Grid;
 
-public class ResetButton extends JButton {
-	public ResetButton(final Grid grid) {
-		super("Reset");
+// TODO: rework OO
+public class ClearButton extends JButton {
+	public ClearButton(final Grid grid) {
+		super("Clear");
 
 		setPreferredSize(new Dimension(80, 20));
 		addMouseListener(new MouseAdapter() {
