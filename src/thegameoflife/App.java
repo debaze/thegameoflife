@@ -16,8 +16,9 @@ public class App {
 		properties.load(new FileInputStream(propertiesPath));
 
 		final Grid grid = new Grid(
-			Integer.parseInt(properties.getProperty("GRID_WIDTH")),
-			Integer.parseInt(properties.getProperty("GRID_HEIGHT"))
+			Integer.parseInt(properties.getProperty("ROWS")),
+			Integer.parseInt(properties.getProperty("COLS")),
+			Float.parseFloat(properties.getProperty("DECAY"))
 		);
 
 		new Window(grid, properties);

@@ -24,17 +24,11 @@ public class Window extends JFrame {
 			}
 		});
 
-		final int cellScale = Integer.parseInt(properties.getProperty("CELL_SCALE"));
-		final Dimension canvasSize = new Dimension(
-			Integer.parseInt(properties.getProperty("GRID_WIDTH")) * cellScale,
-			Integer.parseInt(properties.getProperty("GRID_HEIGHT")) * cellScale
-		);
-		final Canvas canvas = new Canvas(canvasSize, cellScale);
+		final Canvas canvas = new Canvas(grid, Integer.parseInt(properties.getProperty("SCALE")));
 		final Controls controls = new Controls();
 
 		add(canvas, BorderLayout.WEST);
 		add(controls, BorderLayout.EAST);
-
 		pack();
 		setLocationRelativeTo(null);
 
@@ -43,8 +37,7 @@ public class Window extends JFrame {
 		for (;;) {
 			// TODO: paint canvas
 			if (isRunning) {
-				// grid.evolve();
-				canvas.setGrid(grid);
+				grid.evolve();
 				canvas.repaint();
 			}
 
