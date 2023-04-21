@@ -1,10 +1,13 @@
 package thegameoflife;
 
+import java.util.ArrayList;
+
 public class Grid {
 	public final int cols, rows;
-	public final float[][] viewCells;
 	public final float decay;
-	private final float[][] cells;
+	public final float[][] viewCells;
+	public final float[][] cells;
+	private final ArrayList<int[]> userCells;
 	private final int[][] neighbors = new int[8][2];
 
 	public Grid(final int cols, final int rows, final float decay) {
@@ -14,11 +17,11 @@ public class Grid {
 
 		this.cols = cols;
 		this.rows = rows;
-		cells = new float[cols][rows];
-		viewCells = new float[cols][rows];
 		this.decay = decay;
+		viewCells = new float[cols][rows];
+		cells = new float[cols][rows];
+		userCells = new ArrayList<int[]>();
 
-		// TODO: test
 		for (int i = 0, j; i < cols; i++) {
 			for (j = 0; j < rows; j++) {
 				cells[i][j] = Math.random() < .5 ? 1 : 0;
@@ -29,10 +32,22 @@ public class Grid {
 	public void evolve() {
 		int i, j;
 
-		for (i = 0; i < cols; i++) {
-			for (j = 0; j < rows; j++) {
-				viewCells[i][j] = getState(cells[i][j], getNeighborCount(i, j));
+		if (userCells.isEmpty()) {
+			for (i = 0; i < cols; i++) {
+				for (j = 0; j < rows; j++) {
+					viewCells[i][j] = getState(cells[i][j], getNeighborCount(i, j));
+				}
 			}
+		} else {
+			for (i = 0; i < cols; i++) {
+				for (j = 0; j < rows; j++) {
+					if (getUserCell(i, j)) cells[i][j] = 1;
+	
+					viewCells[i][j] = getState(cells[i][j], getNeighborCount(i, j));
+				}
+			}
+
+			userCells.clear();
 		}
 
 		for (i = 0; i < cols; i++) {
@@ -83,6 +98,14 @@ public class Grid {
 		return count;
 	}
 
+	public boolean getUserCell(final int x, final int y) {
+		for (final int[] cell : userCells) {
+			if (cell[0] == x && cell[1] == y) return true;
+		}
+
+		return false;
+	}
+
 	public float getState(final float cell, final int neighborCount) {
 		if (cell != 1) {
 			if (neighborCount == 3) return 1;
@@ -94,5 +117,9 @@ public class Grid {
 		if (neighborCount == 2 || neighborCount == 3) return 1;
 
 		return 1 - decay;
+	}
+
+	public void addUserCell(final int x, final int y) {
+		userCells.add(new int[] {x, y});
 	}
 }

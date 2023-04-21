@@ -1,9 +1,10 @@
 package thegameoflife.gui;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Properties;
-import javax.swing.*;
+import javax.swing.JFrame;
 import thegameoflife.Grid;
 
 public class Window extends JFrame {
@@ -35,7 +36,6 @@ public class Window extends JFrame {
 		frameTime = 1000 / Integer.parseInt(properties.getProperty("FRAMES_PER_SECOND"));
 
 		for (;;) {
-			// TODO: paint canvas
 			if (isRunning) {
 				grid.evolve();
 				canvas.repaint();

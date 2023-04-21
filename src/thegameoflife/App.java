@@ -16,8 +16,8 @@ public class App {
 		properties.load(new FileInputStream(propertiesPath));
 
 		final Grid grid = new Grid(
-			Integer.parseInt(properties.getProperty("ROWS")),
 			Integer.parseInt(properties.getProperty("COLS")),
+			Integer.parseInt(properties.getProperty("ROWS")),
 			Float.parseFloat(properties.getProperty("DECAY"))
 		);
 
