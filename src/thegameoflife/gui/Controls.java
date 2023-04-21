@@ -1,13 +1,11 @@
 package thegameoflife.gui;
 
-import java.awt.Dimension;
 import javax.swing.JPanel;
+import thegameoflife.Grid;
 
 public class Controls extends JPanel {
-	public Controls() {
-		setPreferredSize(new Dimension(100, 0));
-
-		add(new ToggleButton());
-		add(new ResetButton());
+	public Controls(final Grid grid, final Canvas canvas, final Window window) {
+		add(new ToggleButton(window));
+		add(new ResetButton(grid, canvas));
 	}
 }

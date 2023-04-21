@@ -9,7 +9,7 @@ import thegameoflife.Grid;
 
 public class Window extends JFrame {
 	private final long frameTime;
-	private boolean isRunning;
+	public boolean isRunning;
 
 	public Window(final Grid grid, final Properties properties) {
 		super("The Game of Life");
@@ -25,8 +25,8 @@ public class Window extends JFrame {
 			}
 		});
 
-		final Canvas canvas = new Canvas(grid, Integer.parseInt(properties.getProperty("SCALE")));
-		final Controls controls = new Controls();
+		final Canvas canvas = new Canvas(grid, Integer.parseInt(properties.getProperty("SCALE")), this);
+		final Controls controls = new Controls(grid, canvas, this);
 
 		add(canvas, BorderLayout.WEST);
 		add(controls, BorderLayout.EAST);

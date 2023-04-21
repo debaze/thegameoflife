@@ -20,7 +20,7 @@ public class Canvas extends JPanel {
 	private final int scale;
 	private boolean isHovered;
 
-	public Canvas(final Grid grid, final int scale) {
+	public Canvas(final Grid grid, final int scale, final Window window) {
 		this.grid = grid;
 		this.scale = scale;
 		isHovered = false;

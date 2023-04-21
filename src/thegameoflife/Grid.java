@@ -122,4 +122,12 @@ public class Grid {
 	public void addUserCell(final int x, final int y) {
 		userCells.add(new int[] {x, y});
 	}
+
+	public void clear() {
+		for (int i = 0, j; i < cols; i++) {
+			for (j = 0; j < rows; j++) {
+				cells[i][j] = 0;
+			}
+		}
+	}
 }
