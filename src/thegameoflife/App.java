@@ -3,6 +3,7 @@ package thegameoflife;
 import java.io.FileInputStream;
 import java.util.Properties;
 import javax.swing.UIManager;
+
 import thegameoflife.gui.Window;
 
 public class App {

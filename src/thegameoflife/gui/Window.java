@@ -5,25 +5,31 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Properties;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 import thegameoflife.Grid;
+import thegameoflife.Options;
 
 // TODO: rework OO
 public class Window extends JFrame {
-	private final long frameTime;
-	public boolean isSimulationRunning = true;
-
 	public Window(final Properties properties) {
 		super("The Game of Life");
 
-		frameTime = 1000 / Integer.parseInt(properties.getProperty("FRAMES_PER_SECOND"));
-
+		final Options options = new Options(
+			true,
+			Float.parseFloat(properties.getProperty("DECAY")),
+			Integer.parseInt(properties.getProperty("FRAMES_PER_SECOND"))
+		);
 		final Grid grid = new Grid(
 			Integer.parseInt(properties.getProperty("COLS")),
 			Integer.parseInt(properties.getProperty("ROWS")),
-			Float.parseFloat(properties.getProperty("DECAY"))
+			options
 		);
 		final Canvas canvas = new Canvas(grid, Integer.parseInt(properties.getProperty("SCALE")));
-		final Controls controls = new Controls(grid, this);
+		final JPanel controls = new JPanel();
+
+		controls.add(new ToggleButton(options));
+		controls.add(new ClearButton(grid));
 
 		setResizable(false);
 		setVisible(true);
@@ -34,19 +40,19 @@ public class Window extends JFrame {
 			}
 		});
 		add(canvas, BorderLayout.WEST);
-		add(controls, BorderLayout.EAST);
+		add(controls);
 		pack();
 		setLocationRelativeTo(null);
 
 		for (;;) {
 			grid.handleUserActions();
 
-			if (isSimulationRunning) grid.evolve();
+			if (options.isPlaying) grid.evolve();
 
 			canvas.repaint();
 
 			try {
-				Thread.sleep(frameTime);
+				Thread.sleep(options.frameTime);
 			} catch (InterruptedException exception) {
 				break;
 			}

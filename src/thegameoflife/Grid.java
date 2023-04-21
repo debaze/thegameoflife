@@ -4,19 +4,18 @@ import java.util.ArrayList;
 
 public class Grid {
 	public final int cols, rows;
-	public final float decay;
+	public final Options options;
 	public final float[][] cells, clonedCells;
 	private final ArrayList<int[]> addedCells = new ArrayList<int[]>(), removedCells = new ArrayList<int[]>();
 	private final int[][] neighbors = new int[8][2];
 
-	public Grid(final int cols, final int rows, final float decay) {
+	public Grid(final int cols, final int rows, final Options options) {
 		assert cols > 0 : "The column number must be positive.";
 		assert rows > 0 : "The row number must be positive.";
-		assert decay >= 0 && decay <= 1 : "The decay must be included in [0, 1].";
 
 		this.cols = cols;
 		this.rows = rows;
-		this.decay = decay;
+		this.options = options;
 		cells = new float[cols][rows];
 		clonedCells = new float[cols][rows];
 
@@ -133,14 +132,14 @@ public class Grid {
 	public float getState(final float cell, final int neighborCount) {
 		if (cell != 1) {
 			if (neighborCount == 3) return 1;
-			if (cell - decay < 0) return 0;
+			if (cell - options.decay < 0) return 0;
 
-			return cell - decay;
+			return cell - options.decay;
 		}
 
 		if (neighborCount == 2 || neighborCount == 3) return 1;
 
-		return 1 - decay;
+		return 1 - options.decay;
 	}
 
 	public void clear() {
