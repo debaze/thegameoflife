@@ -6,7 +6,7 @@ public class Grid {
 	public final int cols, rows;
 	public final float decay;
 	public final float[][] cells, clonedCells;
-	private final ArrayList<int[]> userCells = new ArrayList<int[]>();
+	private final ArrayList<int[]> addedCells = new ArrayList<int[]>(), removedCells = new ArrayList<int[]>();
 	private final int[][] neighbors = new int[8][2];
 
 	public Grid(final int cols, final int rows, final float decay) {
@@ -27,6 +27,36 @@ public class Grid {
 		}
 	}
 
+	public void addCell(final int x, final int y) {
+		addedCells.add(new int[] {x, y});
+	}
+
+	public void removeCell(final int x, final int y) {
+		removedCells.add(new int[] {x, y});
+	}
+
+	public void handleUserActions() {
+		if (!addedCells.isEmpty()) {
+			for (int i = 0, j; i < cols; i++) {
+				for (j = 0; j < rows; j++) {
+					if (getAddedCell(i, j)) cells[i][j] = 1;
+				}
+			}
+
+			addedCells.clear();
+		}
+
+		if (!removedCells.isEmpty()) {
+			for (int i = 0, j; i < cols; i++) {
+				for (j = 0; j < rows; j++) {
+					if (getRemovedCell(i, j)) cells[i][j] = 0;
+				}
+			}
+
+			removedCells.clear();
+		}
+	}
+
 	public void evolve() {
 		int i, j;
 
@@ -43,19 +73,23 @@ public class Grid {
 		}
 	}
 
-	public void registerUserCells() {
-		if (userCells.isEmpty()) return;
-
-		for (int i = 0, j; i < cols; i++) {
-			for (j = 0; j < rows; j++) {
-				if (getUserCell(i, j)) cells[i][j] = 1;
-			}
+	public boolean getAddedCell(final int x, final int y) {
+		for (final int[] cell : addedCells) {
+			if (cell[0] == x && cell[1] == y) return true;
 		}
 
-		userCells.clear();
+		return false;
 	}
 
-	public void registerNeighbors(final int x, final int y) {
+	public boolean getRemovedCell(final int x, final int y) {
+		for (final int[] cell : removedCells) {
+			if (cell[0] == x && cell[1] == y) return true;
+		}
+
+		return false;
+	}
+
+	public void getNeighborLocations(final int x, final int y) {
 		final int l = x - 1, r = x + 1, t = y - 1, b = y + 1;
 
 		neighbors[0][0] = l;
@@ -77,7 +111,7 @@ public class Grid {
 	}
 
 	public int getNeighborCount(final int x, final int y) {
-		registerNeighbors(x, y);
+		getNeighborLocations(x, y);
 
 		int count = 0;
 
@@ -96,14 +130,6 @@ public class Grid {
 		return count;
 	}
 
-	public boolean getUserCell(final int x, final int y) {
-		for (final int[] cell : userCells) {
-			if (cell[0] == x && cell[1] == y) return true;
-		}
-
-		return false;
-	}
-
 	public float getState(final float cell, final int neighborCount) {
 		if (cell != 1) {
 			if (neighborCount == 3) return 1;
@@ -115,10 +141,6 @@ public class Grid {
 		if (neighborCount == 2 || neighborCount == 3) return 1;
 
 		return 1 - decay;
-	}
-
-	public void addUserCell(final int x, final int y) {
-		userCells.add(new int[] {x, y});
 	}
 
 	public void clear() {

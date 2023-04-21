@@ -10,6 +10,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
 import thegameoflife.Grid;
 
 public class Canvas extends JPanel {
@@ -38,7 +40,13 @@ public class Canvas extends JPanel {
 			}
 
 			public void mousePressed(final MouseEvent event) {
-				grid.addUserCell(cursorLocation[0], cursorLocation[1]);
+				if (SwingUtilities.isLeftMouseButton(event)) {
+					grid.addCell(cursorLocation[0], cursorLocation[1]);
+				}
+
+				if (SwingUtilities.isRightMouseButton(event)) {
+					grid.removeCell(cursorLocation[0], cursorLocation[1]);
+				}
 			}
 		});
 		addMouseMotionListener(new MouseMotionAdapter() {
@@ -51,7 +59,13 @@ public class Canvas extends JPanel {
 				cursorLocation[0] = event.getX() / scale;
 				cursorLocation[1] = event.getY() / scale;
 
-				grid.addUserCell(cursorLocation[0], cursorLocation[1]);
+				if (SwingUtilities.isLeftMouseButton(event)) {
+					grid.addCell(cursorLocation[0], cursorLocation[1]);
+				}
+
+				if (SwingUtilities.isRightMouseButton(event)) {
+					grid.removeCell(cursorLocation[0], cursorLocation[1]);
+				}
 			}
 		});
 	}

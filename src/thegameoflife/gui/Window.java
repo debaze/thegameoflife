@@ -39,7 +39,7 @@ public class Window extends JFrame {
 		setLocationRelativeTo(null);
 
 		for (;;) {
-			grid.registerUserCells();
+			grid.handleUserActions();
 
 			if (isSimulationRunning) grid.evolve();
 

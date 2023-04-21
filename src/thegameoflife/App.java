@@ -6,7 +6,7 @@ import javax.swing.UIManager;
 import thegameoflife.gui.Window;
 
 public class App {
-	public static final String propertiesPath = "src/config.properties";
+	private static final String propertiesPath = "src/config.properties";
 
 	public static void main(final String[] args) throws Exception {
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
