@@ -4,13 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Properties;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import thegameoflife.Grid;
 import thegameoflife.Options;
 
-// TODO: rework OO
 public class Window extends JFrame {
 	public Window(final Properties properties) {
 		super("The Game of Life");
@@ -28,8 +28,11 @@ public class Window extends JFrame {
 		final Canvas canvas = new Canvas(grid, Integer.parseInt(properties.getProperty("SCALE")));
 		final JPanel controls = new JPanel();
 
+		// FIXME: fix control panel layout
+		controls.setLayout(new BoxLayout(controls, BoxLayout.Y_AXIS));
 		controls.add(new ToggleButton(options));
 		controls.add(new ClearButton(grid));
+		controls.add(new DecaySlider(options));
 
 		setResizable(false);
 		setVisible(true);

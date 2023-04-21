@@ -31,14 +31,17 @@ public class Canvas extends JPanel {
 		setBackground(Color.WHITE);
 		setCursor(getToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB), new Point(), null));
 		addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseEntered(final MouseEvent event) {
 				isHovered = true;
 			}
 
+			@Override
 			public void mouseExited(final MouseEvent event) {
 				isHovered = false;
 			}
 
+			@Override
 			public void mousePressed(final MouseEvent event) {
 				if (SwingUtilities.isLeftMouseButton(event)) {
 					grid.addCell(cursorLocation[0], cursorLocation[1]);
@@ -50,11 +53,13 @@ public class Canvas extends JPanel {
 			}
 		});
 		addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
 			public void mouseMoved(final MouseEvent event) {
 				cursorLocation[0] = event.getX() / scale;
 				cursorLocation[1] = event.getY() / scale;
 			}
 
+			@Override
 			public void mouseDragged(final MouseEvent event) {
 				cursorLocation[0] = event.getX() / scale;
 				cursorLocation[1] = event.getY() / scale;
