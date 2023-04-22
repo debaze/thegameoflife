@@ -158,19 +158,22 @@ public class Grid {
 
 		// (TODO) Merge slices into 2D patterns
 		{
-			final ArrayList<int[]> patternBuffer = new ArrayList<>();
-			int y = -1, p, patternMinX, patternMaxX, patternMinY, patternMaxY, minX, maxX;
+			final ArrayList<int[]> currentPatterns = new ArrayList<>();
+			int y = 0, p, patternMinX, patternMaxX, patternMinY, patternMaxY, minX, maxX;
 			boolean hasMatch;
 
 			patterns.clear();
 
+			int i = 0;
 			for (final ArrayList<int[]> line : patternLines) {
 				for (final int[] slice : line) {
+					i++;
 					minX = slice[0];
 					maxX = minX + slice[2];
+					y = slice[1];
 					hasMatch = false;
 
-					for (final int[] pattern : patterns) {
+					for (final int[] pattern : currentPatterns) {
 						patternMinX = pattern[0];
 						patternMaxX = patternMinX + pattern[2];
 
@@ -184,44 +187,41 @@ public class Grid {
 							hasMatch = true;
 
 							// Adjust pattern
-							pattern[0] = Integer.max(patternMinX, minX);
+							// pattern[0] = Integer.max(patternMinX, minX);
 							// pattern[2] = Integer.max(patternMaxX, maxX);
 							pattern[3]++;
-
-							// Update Y
-							y = pattern[1] + pattern[3] - 1;
 						}
 					}
 
-					if (!hasMatch) {
-						// Create new pattern
-						patternBuffer.add(new int[] {slice[0], slice[1], slice[2], 1});
+					// if (hasMatch) System.out.println("Slice " + i + " extends an already existing pattern");
 
-						// Update Y
-						y = slice[1];
+					if (!hasMatch) {
+						// System.out.println("Slice " + i++ + " requests a new pattern");
+
+						// Create new pattern
+						currentPatterns.add(new int[] {slice[0], slice[1], slice[2], 1});
 					}
 				}
 
-				if (y == -1) continue;
+				// Register finished patterns
+				for (p = currentPatterns.size() - 1; p >= 0; p--) {
+					final int[] pattern = currentPatterns.get(p);
 
-				// Keep unfinished patterns
-				for (p = patternBuffer.size() - 1; p >= 0; p--) {
-					final int[] pattern = patternBuffer.get(p);
+					System.out.println(pattern[1] + " + " + pattern[3] + ", " + y);
 
-					if (pattern[1] + pattern[3] - 1 != y) {
-						patternBuffer.remove(pattern);
-
-						continue;
+					if (pattern[1] + pattern[3] <= y) {
+						patterns.add(pattern);
+						currentPatterns.remove(p);
 					}
-
-					patterns.add(pattern);
 				}
 			}
+
+			patterns.addAll(currentPatterns);
 		}
 
-		// int sliceLength = 0;
-		// for (final ArrayList<int[]> line : patternLines) sliceLength += line.size();
-		// System.out.println("Patterns: " + patterns.size() + " / Slices: " + sliceLength);
+		int sliceLength = 0;
+		for (final ArrayList<int[]> line : patternLines) sliceLength += line.size();
+		System.out.println("Patterns: " + patterns.size() + " / Slices: " + sliceLength);
 	}
 
 	private boolean getAddedCell(final int x, final int y) {
