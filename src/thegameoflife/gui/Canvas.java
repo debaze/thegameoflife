@@ -11,7 +11,6 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-
 import thegameoflife.Grid;
 
 public class Canvas extends JPanel {
@@ -19,7 +18,7 @@ public class Canvas extends JPanel {
 	private final int scale;
 	private final Color cursorColor = new Color(.5f, .5f, .5f);
 	private final int[] cursorLocation = new int[2];
-	private boolean isHovered = false;
+	private boolean isHovered = false, firstPaint = true;
 
 	public Canvas(final Grid grid, final int scale) {
 		assert scale != 0 : "The scale must not be null.";
@@ -78,16 +77,22 @@ public class Canvas extends JPanel {
 	public void paintComponent(final Graphics graphics) {
 		super.paintComponent(graphics);
 
+		if (firstPaint) {
+			firstPaint = false;
+
+			return;
+		}
+
 		final Graphics2D graphics2d = (Graphics2D) graphics;
 
 		graphics2d.scale(scale, scale);
 
-		for (int i = 0, j; i < grid.cols; i++) {
-			for (j = 0; j < grid.rows; j++) {
-				if (grid.cells[i][j] == 0) continue;
+		for (int y = 0, x; y < grid.rows; y++) {
+			for (x = 0; x < grid.cols; x++) {
+				if (grid.cells[x][y] == 0) continue;
 
-				graphics2d.setColor(new Color(0, 0, 0, grid.cells[i][j]));
-				graphics2d.fillRect(i, j, 1, 1);
+				graphics2d.setColor(new Color(0, 0, 0, grid.cells[x][y]));
+				graphics2d.fillRect(x, y, 1, 1);
 			}
 		}
 

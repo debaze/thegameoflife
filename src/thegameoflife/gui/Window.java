@@ -7,7 +7,6 @@ import java.util.Properties;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
 import thegameoflife.Grid;
 import thegameoflife.Options;
 
@@ -17,12 +16,14 @@ public class Window extends JFrame {
 
 		final Options options = new Options(
 			true,
+			Float.parseFloat(properties.getProperty("DENSITY")),
 			Float.parseFloat(properties.getProperty("DECAY")),
 			Integer.parseInt(properties.getProperty("FRAMES_PER_SECOND"))
 		);
 		final Grid grid = new Grid(
 			Integer.parseInt(properties.getProperty("COLS")),
 			Integer.parseInt(properties.getProperty("ROWS")),
+			Integer.parseInt(properties.getProperty("PERCEPTION_ERROR_MARGIN")),
 			options
 		);
 		final Canvas canvas = new Canvas(grid, Integer.parseInt(properties.getProperty("SCALE")));
@@ -51,6 +52,8 @@ public class Window extends JFrame {
 			grid.handleUserActions();
 
 			if (options.isPlaying) grid.evolve();
+
+			grid.recognizePatterns();
 
 			canvas.repaint();
 

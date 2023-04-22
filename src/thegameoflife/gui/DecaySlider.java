@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 import thegameoflife.Options;
 
 public class DecaySlider extends JSlider {
