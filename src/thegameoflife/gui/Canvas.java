@@ -96,6 +96,14 @@ public class Canvas extends JPanel {
 			}
 		}
 
+		/* {
+			graphics2d.setColor(new Color(1, .2f, 0, .5f));
+
+			for (final int[] pattern : grid.patterns) {
+				graphics2d.fillRect(pattern[0], pattern[1], pattern[2], pattern[3]);
+			}
+		} */
+
 		if (isHovered) {
 			graphics2d.setColor(cursorColor);
 			graphics2d.fillRect(cursorLocation[0], cursorLocation[1], 1, 1);

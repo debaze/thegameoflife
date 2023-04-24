@@ -1,6 +1,7 @@
 package thegameoflife;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Grid {
 	public final int cols, rows;
@@ -24,9 +25,11 @@ public class Grid {
 		cells = new float[cols][rows];
 		clonedCells = new float[cols][rows];
 
+		final Random random = new Random();
+
 		for (int y = 0, x; y < rows; y++) {
 			for (x = 0; x < cols; x++) {
-				cells[x][y] = Math.random() < options.density ? 1 : 0;
+				cells[x][y] = random.nextFloat() < options.density ? 1 : 0;
 			}
 		}
 	}
@@ -85,7 +88,7 @@ public class Grid {
 		}
 	}
 
-	public void recognizePatterns() {
+	public void extractPatterns() {
 		// Register 1D horizontal slices
 		{
 			final ArrayList<int[]> line = new ArrayList<>();
@@ -177,26 +180,19 @@ public class Grid {
 				}
 
 				slice: for (final int[] slice : line) {
-					minX = slice[0];
-					maxX = minX + slice[2];
+					maxX = (minX = slice[0]) + slice[2];
 
 					for (final int[] pattern : currentPatterns) {
-						patternMinX = pattern[0];
-						patternMaxX = patternMinX + pattern[2];
+						patternMaxX = (patternMinX = pattern[0]) + pattern[2];
 
-						if (
-							((maxX >= patternMinX && maxX <= patternMaxX) && minX <= patternMinX) ||
-							((minX >= patternMinX && minX <= patternMaxX) && maxX >= patternMaxX) ||
-							((minX >= patternMinX && minX <= patternMaxX) && (maxX >= patternMinX && maxX <= patternMaxX)) ||
-							(minX <= patternMinX && maxX >= patternMaxX)
-						) {
-							// Adjust pattern
-							pattern[0] = Integer.min(patternMinX, minX);
-							pattern[2] = Integer.max(pattern[2], slice[2]);
-							if (pattern[1] + pattern[3] != slice[1] + 1) pattern[3]++;
+						if (maxX + 1 < patternMinX || minX - 1 > patternMaxX) continue;
 
-							continue slice;
-						}
+						// Adjust pattern
+						pattern[0] = Integer.min(minX, patternMinX);
+						pattern[2] = Integer.max(maxX, patternMaxX) - pattern[0];
+						if (pattern[1] + pattern[3] != slice[1] + 1) pattern[3]++;
+
+						continue slice;
 					}
 
 					// Create new pattern
@@ -209,7 +205,11 @@ public class Grid {
 	}
 
 	private boolean getAddedCell(final int x, final int y) {
-		for (final int[] cell : addedCells) {
+		int[] cell;
+
+		for (int i = addedCells.size() - 1; i >= 0; i--) {
+			cell = addedCells.get(i);
+
 			if (cell[0] == x && cell[1] == y) return true;
 		}
 
@@ -217,7 +217,11 @@ public class Grid {
 	}
 
 	private boolean getRemovedCell(final int x, final int y) {
-		for (final int[] cell : removedCells) {
+		int[] cell;
+
+		for (int i = removedCells.size() - 1; i >= 0; i--) {
+			cell = removedCells.get(i);
+
 			if (cell[0] == x && cell[1] == y) return true;
 		}
 

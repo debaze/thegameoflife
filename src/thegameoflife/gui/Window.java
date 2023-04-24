@@ -6,6 +6,7 @@ import java.awt.event.WindowEvent;
 import java.util.Properties;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import thegameoflife.Grid;
 import thegameoflife.Options;
@@ -15,7 +16,7 @@ public class Window extends JFrame {
 		super("The Game of Life");
 
 		final Options options = new Options(
-			false,
+			true,
 			Float.parseFloat(properties.getProperty("DENSITY")),
 			Float.parseFloat(properties.getProperty("DECAY")),
 			Integer.parseInt(properties.getProperty("FRAMES_PER_SECOND"))
@@ -23,17 +24,19 @@ public class Window extends JFrame {
 		final Grid grid = new Grid(
 			Integer.parseInt(properties.getProperty("COLS")),
 			Integer.parseInt(properties.getProperty("ROWS")),
-			Integer.parseInt(properties.getProperty("PERCEPTION_ERROR_MARGIN")),
+			Integer.parseInt(properties.getProperty("EXTRACT_ERROR_MARGIN")),
 			options
 		);
 		final Canvas canvas = new Canvas(grid, Integer.parseInt(properties.getProperty("SCALE")));
 		final JPanel controls = new JPanel();
+		final JLabel patternCount = new JLabel("Patterns: 0");
 
 		// FIXME: fix control panel layout
 		controls.setLayout(new BoxLayout(controls, BoxLayout.Y_AXIS));
 		controls.add(new ToggleButton(options));
 		controls.add(new ClearButton(grid));
 		controls.add(new DecaySlider(options));
+		controls.add(patternCount);
 
 		setResizable(false);
 		setVisible(true);
@@ -53,7 +56,8 @@ public class Window extends JFrame {
 
 			if (options.isPlaying) grid.evolve();
 
-			grid.recognizePatterns();
+			grid.extractPatterns();
+			patternCount.setText("Patterns: " + grid.patterns.size());
 
 			canvas.repaint();
 
