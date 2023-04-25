@@ -3,12 +3,15 @@ package thegameoflife;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import thegameoflife.network.Pattern;
+import thegameoflife.network.Trainer;
 
 public class Grid {
 	public final int cols, rows;
 	public final Options options;
 	public final float[][] cells, clonedCells;
 	public final ArrayList<int[]> patterns = new ArrayList<>();
+	public int blinkers;
 	private final ArrayList<int[]> addedCells = new ArrayList<>(), removedCells = new ArrayList<>();
 	private final int[][] neighbors = new int[8][2];
 	private final ArrayList<ArrayList<int[]>> patternLines = new ArrayList<>();
@@ -206,13 +209,21 @@ public class Grid {
 	}
 
 	public void recognizePatterns() {
-		double[] sample;
+		final double[] sample = new double[9];
 		int x, y, width, height;
+		Pattern patternType;
+
+		blinkers = 0;
 
 		for (final int[] pattern : patterns) {
 			width = pattern[2];
 			height = pattern[3];
-			sample = new double[width * height];
+
+			if (width > 3 || height > 3) continue;
+			if (width == 1 && height == 1) continue;
+			if ((width == 2 && height == 1) || (width == 1 && height == 2)) continue;
+
+			sample[0] = sample[1] = sample[2] = sample[3] = sample[4] = sample[5] = sample[6] = sample[7] = sample[8] = 0;
 
 			for (y = 0; y < height; y++) {
 				for (x = 0; x < width; x++) {
@@ -220,7 +231,13 @@ public class Grid {
 				}
 			}
 
-			System.out.println(Arrays.toString(sample));
+			System.out.println(Trainer.network.predict(sample)[0]);
+
+			// patternType = Pattern.fromId((int) Trainer.network.predict(sample)[0]);
+
+			// System.out.println(patternType);
+
+			// if (patternType == Pattern.BLINKER) blinkers++;
 		}
 	}
 
