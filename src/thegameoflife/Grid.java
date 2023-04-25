@@ -1,6 +1,7 @@
 package thegameoflife;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class Grid {
@@ -201,6 +202,25 @@ public class Grid {
 			}
 
 			patterns.addAll(currentPatterns);
+		}
+	}
+
+	public void recognizePatterns() {
+		double[] sample;
+		int x, y, width, height;
+
+		for (final int[] pattern : patterns) {
+			width = pattern[2];
+			height = pattern[3];
+			sample = new double[width * height];
+
+			for (y = 0; y < height; y++) {
+				for (x = 0; x < width; x++) {
+					sample[x + y * width] = cells[x + pattern[0]][y + pattern[1]] == 1 ? 1 : 0;
+				}
+			}
+
+			System.out.println(Arrays.toString(sample));
 		}
 	}
 

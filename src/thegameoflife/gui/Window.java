@@ -58,12 +58,13 @@ public class Window extends JFrame {
 
 			grid.extractPatterns();
 			patternCount.setText("Patterns: " + grid.patterns.size());
+			grid.recognizePatterns();
 
 			canvas.repaint();
 
 			try {
 				Thread.sleep(options.frameTime);
-			} catch (InterruptedException exception) {
+			} catch (final InterruptedException exception) {
 				break;
 			}
 		}
