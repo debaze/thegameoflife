@@ -18,7 +18,7 @@ public class Canvas extends JPanel {
 	private final int scale;
 	private final Color cursorColor = new Color(.5f, .5f, .5f);
 	private final int[] cursorLocation = new int[2];
-	private boolean isHovered = false, firstPaint = true;
+	private boolean isHovered, firstPaint = true;
 
 	public Canvas(final Grid grid, final int scale) {
 		assert scale != 0 : "The scale must not be null.";

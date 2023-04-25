@@ -30,7 +30,7 @@ public class Window extends JFrame {
 		final Canvas canvas = new Canvas(grid, Integer.parseInt(properties.getProperty("SCALE")));
 		final JPanel controls = new JPanel();
 		final JLabel patternCount = new JLabel("Patterns: 0");
-		final JLabel blinkerCount = new JLabel("Blinkers: 0");
+		final JLabel gliderCount = new JLabel("Gliders: 0");
 
 		// FIXME: fix control panel layout
 		controls.setLayout(new BoxLayout(controls, BoxLayout.Y_AXIS));
@@ -38,7 +38,7 @@ public class Window extends JFrame {
 		controls.add(new ClearButton(grid));
 		controls.add(new DecaySlider(options));
 		controls.add(patternCount);
-		controls.add(blinkerCount);
+		controls.add(gliderCount);
 
 		setResizable(false);
 		setVisible(true);
@@ -59,9 +59,9 @@ public class Window extends JFrame {
 			if (options.isPlaying) grid.evolve();
 
 			grid.extractPatterns();
-			grid.recognizePatterns();
+			grid.recognizeGliderPatterns();
 			patternCount.setText("Patterns: " + grid.patterns.size());
-			blinkerCount.setText("Blinkers: " + grid.blinkers);
+			gliderCount.setText("Gliders: " + grid.gliderPatterns);
 
 			canvas.repaint();
 

@@ -1,10 +1,7 @@
 package thegameoflife.network;
 
 public enum Pattern {
-	BLOCK(0),
-	BOAT(1),
-	BLINKER(2),
-	GLIDER(3);
+	GLIDER(1);
 
 	final int id;
 
