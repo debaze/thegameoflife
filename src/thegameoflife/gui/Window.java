@@ -16,7 +16,7 @@ public class Window extends JFrame {
 		super("The Game of Life");
 
 		final Options options = new Options(
-			true,
+			false,
 			Float.parseFloat(properties.getProperty("DENSITY")),
 			Float.parseFloat(properties.getProperty("DECAY")),
 			Integer.parseInt(properties.getProperty("FRAMES_PER_SECOND"))
